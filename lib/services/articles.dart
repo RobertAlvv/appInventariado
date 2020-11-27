@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:inventario_alv/models/articles.dart';
+import 'package:inventario_alv/models/articles/articles.dart';
 
 class ServiceArticles {
   final String url = "http://10.0.0.80:3000/api/v1";

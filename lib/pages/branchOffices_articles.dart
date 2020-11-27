@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventario_alv/bloc/company-branchOffices_bloc.dart';
-import 'package:inventario_alv/models/articles.dart';
+import 'package:inventario_alv/models/articles/articles.dart';
 
 class BranchOffices_ArticlesPage extends StatelessWidget {
   @override

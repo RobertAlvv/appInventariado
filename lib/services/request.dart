@@ -28,8 +28,10 @@ class RequestBase {
       );
       return resp;
     } catch (e) {
-      String errorStatus = error.status(e.toString());
-      return errorStatus;
+      final errorCode = error.status(e.toString());
+      Response resp =
+          Response(statusCode: (errorCode.keys).first, data: errorCode.values);
+      return resp;
     }
   }
 
@@ -42,22 +44,28 @@ class RequestBase {
       );
       return resp;
     } catch (e) {
-      String errorStatus = error.status(e.toString());
-      return errorStatus;
+      Map<int, String> errorCode = error.status(e.toString());
+      Response resp =
+          Response(statusCode: (errorCode.keys).first, data: errorCode.values);
+      return resp;
     }
   }
 
-  Future<dynamic> requestPut(String route, List<dynamic> data) async {
+  Future<dynamic> requestPut(
+      String route, String id, Map<String, dynamic> data) async {
     try {
       Response resp = await dio.put(
         route,
+        queryParameters: {"id": id},
         data: data,
         options: Options(headers: {"Authorization": "Bearer $token"}),
       );
       return resp;
     } catch (e) {
-      String errorStatus = error.status(e.toString());
-      return errorStatus;
+      final errorCode = error.status(e.toString());
+      Response resp =
+          Response(statusCode: (errorCode.keys).first, data: errorCode.values);
+      return resp;
     }
   }
 
@@ -70,27 +78,35 @@ class RequestBase {
       );
       return resp;
     } catch (e) {
-      String errorStatus = error.status(e.toString());
-      return errorStatus;
+      final errorCode = error.status(e.toString());
+      Response resp =
+          Response(statusCode: (errorCode.keys).first, data: errorCode.values);
+      return resp;
     }
   }
 }
 
 class ResponseError {
-  Map<String, String> statusCode = {
-    "400": "Missing or Malformed Token",
-    "401": "Invalid or Expired Token",
-    "404": "Resource Not Found",
-    "409": "This Resourse Already Exists",
-    "422": "Unprocessable Entity",
+  Map<int, String> statusCode = {
+    400: "Missing or Malformed Token",
+    401: "Invalid or Expired Token",
+    404: "Resource Not Found",
+    405: "Method Not Allowed",
+    409: "This Resourse Already Exists",
+    422: "Unprocessable Entity",
   };
 
-  String status(String responseError) {
+  Map<int, String> status(String responseError) {
     for (var itemCode in statusCode.keys) {
-      if (responseError.contains(itemCode)) {
-        return statusCode[itemCode];
+      if (responseError.contains((itemCode).toString())) {
+        return {
+          itemCode: statusCode[itemCode],
+        };
       }
     }
-    return "Check Server Error 500";
+
+    return {
+      500: "Check Server Error 500",
+    };
   }
 }

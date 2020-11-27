@@ -1,21 +1,24 @@
-import 'package:inventario_alv/models/company.dart';
-import 'package:inventario_alv/services/response.dart';
+import 'package:dio/dio.dart';
+import 'package:inventario_alv/models/companies/company.dart';
+import 'package:inventario_alv/services/request.dart';
+import 'package:inventario_alv/services/users.dart';
 
-class ServiceCompany {
+class ServiceCompanies {
   RequestBase request;
-  ServiceCompany() {
+
+  ServiceCompanies() {
     request = RequestBase();
   }
 
   Future<List<Company>> getCompanies() async {
-    var resp = await request.requestGet("/companies");
-    print(resp);
-    return <Company>[];
+    Response resp = await request.requestGet("/companies");
+    final body = resp.data;
+    return listCompany(body["data"]);
   }
 
   Future<Company> getCompany(String rnc) async {
-    final resp = await request.requestGet("/companies/$rnc");
-    Company company = companyFromJson(resp.body);
+    Response resp = await request.requestGet("/companies/$rnc");
+    Company company = companyFromJson(resp.data);
     return company;
   }
 }

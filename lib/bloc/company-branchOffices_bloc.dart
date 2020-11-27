@@ -1,59 +1,54 @@
 import 'dart:async';
 
-import 'package:inventario_alv/models/company.dart';
-import 'package:inventario_alv/models/computer.dart';
-import 'package:inventario_alv/models/keyboard.dart';
-import 'package:inventario_alv/models/monitor.dart';
-import 'package:inventario_alv/models/articles.dart';
+import 'package:inventario_alv/models/companies/company.dart';
+import 'package:inventario_alv/models/articles/computer.dart';
+import 'package:inventario_alv/models/articles/keyboard.dart';
+import 'package:inventario_alv/models/articles/monitor.dart';
+import 'package:inventario_alv/models/articles/articles.dart';
 import 'package:inventario_alv/services/articles.dart';
-export 'package:inventario_alv/models/company.dart';
+export 'package:inventario_alv/models/companies/company.dart';
 import 'package:inventario_alv/services/company.dart';
 
-final companyServices = ServiceCompany();
+final companyServices = ServiceCompanies();
 
 List<Company> companies;
 List<BranchOffice> branch_offices;
 Articles articles;
 
-class CompanyBloc{
-
+class CompanyBloc {
   final _companyController = StreamController<List<Company>>.broadcast();
 
   Stream<List<Company>> get streamCompany => _companyController.stream;
 
-  cargarCompany() async{
+  cargarCompany() async {
     companies = await companyServices.getCompanies();
     _companyController.sink.add(companies);
   }
 
-  dispose(){
+  dispose() {
     _companyController.close();
   }
 }
 
+class Branch_OfficesBloc {
+  final _branchofficesController =
+      StreamController<List<BranchOffice>>.broadcast();
 
-class Branch_OfficesBloc{
-  final _branchofficesController = StreamController<List<BranchOffice>>.broadcast();
+  Stream<List<BranchOffice>> get streamBranchOffice =>
+      _branchofficesController.stream;
 
-  Stream<List<BranchOffice>> get streamBranchOffice => _branchofficesController.stream;
-  
-  cargarBranch_Offices(){
-    for(var company in companies){
-      branch_offices = company.branchOffices;
-      print(branch_offices);
+  void cargarBranch_Offices() async {
+    for (var company in companies) {
+      await _branchofficesController.sink.add(company.branchOffices);
     }
-    
-    _branchofficesController.sink.add(branch_offices);
-    
   }
 
-  dispose(){
+  dispose() {
     _branchofficesController.close();
   }
 }
 
-
-class ArticlesBloc{
+class ArticlesBloc {
   final _articlesController = StreamController<Articles>.broadcast();
 
   final _computerController = StreamController<List<Computer>>.broadcast();
@@ -65,15 +60,15 @@ class ArticlesBloc{
   Stream<List<Keyboard>> get streamKeyboard => _keyboardController.stream;
   Stream<Articles> get streamArticles => _articlesController.stream;
 
-  cargarArticles() async{
+  cargarArticles() async {
     // _computerController.sink.add(articles.computer);
     // _monitorController.sink.add(articles.monitor);
     // _keyboardController.sink.add(articles.keyboard);
   }
 
-  dispose(){
-   _computerController.close();
-   _monitorController.close();
-   _keyboardController.close();
+  dispose() {
+    _computerController.close();
+    _monitorController.close();
+    _keyboardController.close();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventario_alv/bloc/company-branchOffices_bloc.dart';
-import 'package:inventario_alv/models/articles.dart';
+import 'package:inventario_alv/models/articles/articles.dart';
 
 class Company_BranchOfficesPage extends StatelessWidget {
   final branch_officesBloc = Branch_OfficesBloc();
@@ -8,7 +8,7 @@ class Company_BranchOfficesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     branch_officesBloc.cargarBranch_Offices();
-   Map<String, dynamic> send = ModalRoute.of(context).settings.arguments;
+    Map<String, dynamic> send = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -23,7 +23,7 @@ class Company_BranchOfficesPage extends StatelessWidget {
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
-                 Articles articles = send["branch_offices"][index].articles;
+                Articles articles = send["branch_offices"][index].articles;
                 return ListTile(
                   title: Text('${data[index].name}'),
                   onTap: () => Navigator.pushNamed(
